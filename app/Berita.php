@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Berita extends Model
 {
-    protected $fillable = ['judul','kategori_id','deskripsi','tanggal','cover'];
+    protected $fillable = ['cover','judul','kategori_id','deskripsi','tanggal'];
 
     public function kategoris()
     {

@@ -24,7 +24,7 @@ class UsersSeeder extends Seeder
         $memberRole->save();
 
         $admin = new User();
-        $admin->name="Admin Larapus";
+        $admin->name="Admin Laragame";
         $admin->email="admin@gmail.com";
         $admin->password=bcrypt('rahasia');
         

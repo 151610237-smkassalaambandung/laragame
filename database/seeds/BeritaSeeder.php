@@ -17,6 +17,6 @@ class BeritaSeeder extends Seeder
         $kategori2=Kategori::create(['kategori'=>'Nitendo']);
         $kategori3=Kategori::create(['kategori'=>'PS2']);
 
-        $berita1=Berita::create(['judul'=>'Street Fighter IV: Edisi Champion Memulai Debut Di Ranah iOS','kategori_id'=>$kategori1->id,'deskripsi'=>'bababajkuhaihdadh', 'tanggal'=>'10-10-2011']);
+        $berita1=Berita::create(['judul'=>'Street Fighter IV: Edisi Champion Memulai Debut Di Ranah iOS','kategori_id'=>$kategori1->id,'deskripsi'=>'bababajkuhaihdadh', 'tanggal'=>'2017-10-10']);
     }
 }

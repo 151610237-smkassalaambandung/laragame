@@ -3,6 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Kategori;
+use App\Author;
+use Yajra\Datatables\Html\Builder;
+use Yajra\Datatables\Datatables;
+use Session;
+
+
 
 class KategoriController extends Controller
 {
@@ -11,9 +18,28 @@ class KategoriController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request, Builder $htmlBuilder)
     {
-        //
+        if ($request->ajax()){
+            $kategoris = Kategori::select(['id','kategori']);
+            return Datatables::of($kategoris)
+                ->addColumn('action', function($kategori){
+                    return view('datatable._action', [
+                        'model'     => $kategori,
+                        'form_url'  => route('kategoris.destroy',$kategori->id),
+                        'edit_url' => route('kategoris.edit', $kategori->id),
+                        'confirm_message' => 'Yakin Ingin Menghapus ' . $kategori->name . ' ?' ]);
+                    
+                })->make(true);
+        }
+
+        $html = $htmlBuilder
+        ->addColumn(['data'=>'kategori','kategori'=>'kategori','title'=>'Kategori'])
+        ->addColumn(['data'=>'action','kategori'=>'action','title'=>'','orderable'=>false,'\searchable'=>false]);
+
+        return view('kategoris.index')->with(compact('html'));
+
+
     }
 
     /**
@@ -23,7 +49,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        return view('kategoris.create');
     }
 
     /**
@@ -34,7 +60,12 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, ['kategori'=>'required|unique:kategoris']);
+        $kategori = Kategori::create($request->only('kategori'));
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"Berhasil Menyimpan $kategori->kategori"]);
+        return redirect()->route('kategoris.index');
     }
 
     /**
@@ -56,7 +87,9 @@ class KategoriController extends Controller
      */
     public function edit($id)
     {
-        //
+        $kategori=Kategori::find($id);
+        return view('kategoris.edit')->with(compact('kategori'));
+        
     }
 
     /**
@@ -68,7 +101,13 @@ class KategoriController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, ['kategori'=>'required|unique:kategoris,kategori,'.$id]);
+        $kategori = Kategori::find($id);
+        $kategori->update($request->only('kategori'));
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"Berhasil Menyimpan $kategori->kategori"]);
+        return redirect()->route('kategoris.index');
     }
 
     /**
@@ -79,6 +118,10 @@ class KategoriController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!Kategori::destroy($id))  return redirect()->back();
+        Session::flash("flash_notification", [
+            "level"=>"success",
+            "message"=>"Kategori Berhasil Dihapus"]);
+        return redirect()->route('kategoris.index');
     }
 }
