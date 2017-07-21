@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Yajra\Datatables\Html\Builder;
 use Yajra\Datatables\Datatables;
 use App\Berita;
-use App\Kategori;
+
 
 class BeritaController extends Controller
 {
@@ -31,12 +31,14 @@ class BeritaController extends Controller
         }
 
         $html = $htmlBuilder
-        ->addColumn(['data'=>'cover','cover'=>'title','title'=>'Cover'])
-        ->addColumn(['data'=>'judul','judul'=>'title','title'=>'Judul'])
-        ->addColumn(['data'=>'deskripsi','deskripsi'=>'title','title'=>'Deskripsi'])
-        ->addColumn(['data'=>'tanggal','tanggal'=>'title','title'=>'Tanggal'])
-        ->addColumn(['data'=>'kategori.kategori','kategori'=>'kategori.kategori','title'=>'kategori'])
-        ->addColumn(['data'=>'action','deskripsi'=>'action','title'=>'deskripsi','orderable'=>false,'searchable'=>false]);
+            ->addColumn(['data'=>'cover','name'=>'cover','title'=>'Cover'])
+            ->addColumn(['data'=>'judul','name'=>'judul','title'=>'Judul'])
+            ->addColumn(['data'=>'deskripsi','name'=>'deskripsi','title'=>'Deskripsi'])
+            ->addColumn(['data'=>'tanggal','name'=>'tanggal','title'=>'Tanggal'])
+            ->addColumn(['data'=>'kategori.kategori','name'=>'kategori.kategori','title'=>'Kategori'])
+            ->addColumn(['data'=>'action', 'name'=>'action', 'title'=>'', 'orderable'=>false,
+                'searchable'=>false]);
+
 
         return view('beritas.index')->with(compact('html'));
 
